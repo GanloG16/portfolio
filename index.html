@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creature Portfolio</title>
+<style>
+
+/* BASE */
+body{margin:0;font-family:Segoe UI,Arial;background:#0b0b0f;color:white;line-height:1.6;overflow-x:hidden;min-width:320px}
+section{padding:clamp(60px,6vw,110px) clamp(24px,5vw,80px);max-width:1400px;margin:0 auto;opacity:0;transform:translateY(80px) scale(.96);transition:transform .6s ease,opacity .6s ease;position:relative;z-index:2;will-change:transform}
+section.visible{opacity:1;transform:translateY(0) scale(1)}
+h1,h2,h3{margin-bottom:12px}
+
+/* SECTION HEADERS */
+.section-header{max-width:900px;margin:0 auto 70px auto;text-align:center}
+.section-header h2{font-size:32px;letter-spacing:.5px}
+.section-header p{margin:10px auto 20px auto;font-size:17px}
+.section-line{width:120px;height:2px;margin:18px auto 0 auto;background:linear-gradient(90deg,transparent,white,transparent);opacity:.9}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:0}
+p{color:#bdbdbd;max-width:700px;margin-bottom:20px}
+
+/* PARTICLES */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* DEV CARD */
+.dev-card{max-width:640px;width:100%;margin:auto;background:#141419;border-radius:18px;padding:clamp(28px,4vw,50px);display:flex;flex-direction:column;align-items:center;gap:22px;transition:.4s;position:relative;overflow:hidden;text-align:center}
+.dev-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--x) var(--y),rgba(120,120,255,.18),transparent 40%);opacity:0;transition:.3s}
+.dev-card:hover::before{opacity:1}
+.dev-card:hover{transform:translateY(-6px) scale(1.02)}
+
+.dev-name{font-size:clamp(26px,4vw,38px);margin:0}
+
+.avatar{width:clamp(90px,14vw,150px);height:clamp(90px,14vw,150px);border-radius:100%;object-fit:cover;margin-top:5px}
+
+.dev-info{width:100%;display:flex;flex-direction:column;align-items:center;gap:14px}
+
+.dev-description{font-size:clamp(14px,1.6vw,17px);margin:0}
+
+.buttons{display:flex;gap:12px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+
+.btn{display:inline-flex;align-items:center;gap:10px;background:#1d1d24;padding:10px 16px;border-radius:8px;text-decoration:none;color:white;transition:.25s;font-size:14px}
+
+.btn-icon{width:18px;height:18px;object-fit:contain;opacity:.9}
+
+.btn:hover{background:#2a2a35;transform:translateY(-3px)}
+
+@media(max-width:600px){
+
+.dev-card{padding:26px 20px}
+
+.buttons{gap:10px}
+
+.btn{font-size:13px;padding:9px 14px}
+
+.btn-icon{width:16px;height:16px}
+
+}
+
+/* STRONG SIDES LIST */
+.strengths{margin:10px auto 6px auto;padding:20px 24px;background:#1a1a22;border-radius:12px;text-align:left;width:100%;max-width:520px}
+
+.strengths h3{margin:0 0 12px 0;font-size:18px;font-weight:600}
+
+.strengths ul{margin:0;padding-left:18px;color:#d0d0d0;line-height:1.7}
+
+.strengths li{margin:4px 0}
+
+/* MONSTER FEATURE (FIRST IMAGE + TEXT) */
+
+/* DESKTOP: image left, text right */
+.monster-feature{
+ display:flex;
+ align-items:center;
+ gap:50px;
+ margin-bottom:40px;
+}
+
+/* FIRST IMAGE — identical sizing system as staircase images */
+.monster-feature .item{
+ width:60%;
+ flex-shrink:0;
+}
+
+.monster-feature .item{
+ width:60%;
+ justify-self:start;
+}
+
+.monster-text{
+ max-width:420px;
+}
+
+.monster-text h2{margin-bottom:10px;font-size:28px}
+.monster-text p{font-size:16px}
+
+/* TABLET: text moves above image */
+@media(max-width:1000px){
+.monster-feature{
+ flex-direction:column;
+ text-align:center;
+ gap:20px;
+}
+
+.monster-text{
+ order:-1;
+ margin:0 auto;
+ max-width:650px;
+ text-align:center;
+}
+
+.monster-feature .item{
+ width:75%;
+ margin:0 auto;
+}
+}
+
+/* MOBILE */
+@media(max-width:700px){
+.monster-feature .item{
+ width:100%;
+}
+
+.monster-text{
+ max-width:95%;
+}
+}
+
+/* GALLERIES */
+.gallery{margin-top:40px}
+
+/* MONSTER STAIR */
+.gallery-wide{display:flex;flex-direction:column;gap:clamp(40px,6vw,90px);max-width:1300px;margin:auto;position:relative}
+
+/* keep ALL images same base size */
+.gallery-wide .item{width:60%;position:relative}
+
+/* staircase */
+.gallery-wide .item:nth-child(odd){align-self:flex-start}
+.gallery-wide .item:nth-child(even){align-self:flex-end}
+
+/* subtle stepping */
+.gallery-wide .item:nth-child(2){margin-top:25px}
+.gallery-wide .item:nth-child(3){margin-top:45px}
+.gallery-wide .item:nth-child(4){margin-top:25px}
+.gallery-wide .item:nth-child(5){margin-top:45px}
+
+/* tablet */
+@media(max-width:1000px){
+.gallery-wide{gap:60px}
+.gallery-wide .item{width:75%}
+.gallery-wide .item:nth-child(n){margin-top:20px}
+}
+
+/* mobile */
+@media(max-width:700px){
+.gallery-wide{gap:28px}
+.gallery-wide .item{
+ width:100%;
+ align-self:center;
+ margin-top:0;
+}
+}
+
+/* CREATURE GRID */
+.grid{display:grid !important;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.grid .item{margin-bottom:0}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:750px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
+
+/* BUILDING PINTEREST GRID */
+.building-grid{column-count:3;column-gap:20px}
+@media(max-width:900px){.building-grid{column-count:2}}
+@media(max-width:600px){.building-grid{column-count:1}}
+
+.item{cursor:pointer;overflow:hidden;margin-bottom:20px;break-inside:avoid;position:relative}
+.item img{width:100%;height:auto;border-radius:10px;transition:transform .35s ease,opacity .25s ease;display:block}
+.item:hover img{transform:scale(1.03)}
+.item img.fade{opacity:0}
+
+/* IMAGE VIEWER */
+.viewer{position:fixed;inset:0;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;z-index:50}
+.viewer.hidden{display:none}
+.viewer img{max-width:85%;max-height:85%;border-radius:10px}
+.arrow{position:absolute;top:50%;font-size:40px;cursor:pointer;padding:20px;user-select:none}
+.left{left:40px}
+.right{right:40px}
+.close{position:absolute;top:25px;right:30px;font-size:28px;cursor:pointer}
+.viewer-tools{position:absolute;top:20px;right:80px;display:flex;gap:10px}
+.viewer-tools button{background:#1d1d24;border:none;color:white;padding:8px 12px;border-radius:6px;cursor:pointer}
+.viewer-tools button:hover{background:#2a2a35}
+
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<section class="hero">
+<div class="dev-card" id="devCard">
+
+<h1 class="dev-name">Ganlo16</h1>
+
+<img class="avatar" src="img/ganloavatar.jpg">
+
+<div class="dev-info">
+
+<p class="dev-description">Roblox creature modeller specializing in horror monsters and atmospheric environments.</p>
+
+<div class="strengths">
+<h3>Strong Sides</h3>
+<ul>
+<li>High quality creature modelling</li>
+<li>Horror atmosphere and creature design</li>
+<li>Game‑ready optimized assets</li>
+<li>Environment and structure building</li>
+</ul>
+</div>
+
+<div class="buttons">
+<a class="btn" href="discord://-/users/581053381536251904">
+<img class="btn-icon" src="img/discordicon.png">
+Discord
+</a>
+
+<a class="btn" href="https://www.roblox.com/users/2200933064/profile">
+<img class="btn-icon" src="img/robloxicon.png">
+Roblox
+</a>
+</div>
+
+</div>
+
+</div>
+</section>
+
+<section>
+<div class="gallery gallery-wide">
+
+<div class="monster-feature">
+
+<div class="item" data-images="img/ganloavatar.jpg">
+<img loading="lazy" src="img/ganloavatar.jpg">
+</div>
+
+<div class="monster-text">
+<h2>Creature Title</h2>
+<p>Short description of the creature. Describe the idea, atmosphere, or lore behind this monster and what makes the design unique.</p>
+</div>
+
+</div>
+
+<div class="item" data-images="img/demon_1.png">
+<img loading="lazy" src="img/demon_1.png">
+</div>
+
+<div class="item" data-images="img/demon_1.png">
+<img loading="lazy" src="img/demon_1.png">
+</div>
+
+</div>
+</section>
+
+<section>
+<div class="section-header">
+<h2>Creature Concepts</h2>
+<p>Square creature previews.</p>
+<div class="section-line"></div>
+</div>
+
+<div class="gallery grid">
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+<div class="item" data-images="img/war_cell_front.png, img/war_cell_back.png">
+<img loading="lazy" src="img/war_cell_front.png">
+</div>
+
+</div>
+</section>
+
+<section>
+<div class="section-header">
+<h2>Building Work</h2>
+<p>Environment creation for Roblox games.</p>
+<div class="section-line"></div>
+</div>
+
+<div class="building-grid">
+
+<div class="item" data-images="img/test_1.png">
+<img loading="lazy" src="img/test_1.png">
+</div>
+
+<div class="item" data-images="img/test_2.png">
+<img loading="lazy" src="img/test_2.png">
+</div>
+
+<div class="item" data-images="img/test_3.png">
+<img loading="lazy" src="img/test_3.png">
+</div>
+
+<div class="item" data-images="img/test_4.png">
+<img loading="lazy" src="img/test_4.png">
+</div>
+
+<div class="item" data-images="img/test_5.png">
+<img loading="lazy" src="img/test_5.png">
+</div>
+
+<div class="item" data-images="img/test_6.png">
+<img loading="lazy" src="img/test_6.png">
+</div>
+
+<div class="item" data-images="img/test_7.png">
+<img loading="lazy" src="img/test_7.png">
+</div>
+
+<div class="item" data-images="img/test_8.png">
+<img loading="lazy" src="img/test_8.png">
+</div>
+
+<div class="item" data-images="img/test_9.png">
+<img loading="lazy" src="img/test_9.png">
+</div>
+
+<div class="item" data-images="img/test_10.png">
+<img loading="lazy" src="img/test_10.png">
+</div>
+
+</div>
+</section>
+
+<div id="viewer" class="viewer hidden">
+
+<div class="viewer-tools">
+<button onclick="downloadImage()">Download</button>
+<button onclick="copyImage()">Copy</button>
+</div>
+
+<div class="arrow left" id="prev">❮</div>
+<img id="viewer-img">
+<div class="arrow right" id="next">❯</div>
+<div class="close" id="close">✕</div>
+</div>
+
+<script>
+
+const sections=document.querySelectorAll("section")
+
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){
+   entry.target.classList.add("visible")
+  }else{
+   entry.target.classList.remove("visible")
+  }
+ })
+},{threshold:.15})
+
+sections.forEach(sec=>observer.observe(sec))
+
+function updateScrollMotion(){
+ const viewport=window.innerHeight
+
+ sections.forEach(sec=>{
+  const rect=sec.getBoundingClientRect()
+  const progress=(rect.top+rect.height/2)/viewport
+  const offset=(progress-0.5)*-60
+  sec.style.transform=`translateY(${offset}px)`
+ })
+
+ document.querySelectorAll('.gallery-wide .item').forEach((el,i)=>{
+  const rect=el.getBoundingClientRect()
+  const mid=rect.top+rect.height/2
+  const diff=(mid-viewport/2)/viewport
+
+  const vertical=diff*40
+
+  let horizontal=0
+  if(i%2===0) horizontal=diff*-30
+  else horizontal=diff*30
+
+  el.style.transform=`translate(${horizontal}px, ${vertical}px)`
+ })
+
+ requestAnimationFrame(updateScrollMotion)
+}
+
+updateScrollMotion()
+
+
+const card=document.getElementById("devCard")
+card.addEventListener("mousemove",e=>{
+ const rect=card.getBoundingClientRect()
+ card.style.setProperty("--x",(e.clientX-rect.left)+"px")
+ card.style.setProperty("--y",(e.clientY-rect.top)+"px")
+})
+
+const canvas=document.getElementById("particles")
+const ctx=canvas.getContext("2d")
+let w,h
+let particles=[]
+
+function resize(){
+ w=canvas.width=window.innerWidth
+ h=canvas.height=window.innerHeight
+}
+window.addEventListener("resize",resize)
+resize()
+
+for(let i=0;i<70;i++){
+ particles.push({
+  x:Math.random()*w,
+  y:Math.random()*h,
+  r:Math.random()*2+0.5,
+  vx:(Math.random()-.5)*0.2,
+  vy:(Math.random()-.5)*0.2
+ })
+}
+
+function animateParticles(){
+ ctx.clearRect(0,0,w,h)
+ ctx.fillStyle="rgba(140,140,255,0.35)"
+
+ particles.forEach(p=>{
+  p.x+=p.vx
+  p.y+=p.vy
+
+  if(p.x<0||p.x>w)p.vx*=-1
+  if(p.y<0||p.y>h)p.vy*=-1
+
+  ctx.beginPath()
+  ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+  ctx.fill()
+ })
+
+ requestAnimationFrame(animateParticles)
+}
+animateParticles()
+
+const items=document.querySelectorAll(".item")
+const viewer=document.getElementById("viewer")
+const viewerImg=document.getElementById("viewer-img")
+const next=document.getElementById("next")
+const prev=document.getElementById("prev")
+const close=document.getElementById("close")
+
+let images=[]
+let index=0
+
+items.forEach(item=>{
+ const imgs=item.dataset.images.split(",")
+ const img=item.querySelector("img")
+
+ if(imgs.length>1){
+
+  item.addEventListener("mouseenter",()=>{
+   img.classList.add("fade")
+   setTimeout(()=>{
+    img.src=imgs[1]
+    img.classList.remove("fade")
+   },120)
+  })
+
+  item.addEventListener("mouseleave",()=>{
+   img.classList.add("fade")
+   setTimeout(()=>{
+    img.src=imgs[0]
+    img.classList.remove("fade")
+   },120)
+  })
+ }
+
+ item.addEventListener("click",()=>{
+  images=imgs
+  index=0
+  viewerImg.src=images[index]
+  viewer.classList.remove("hidden")
+ })
+})
+
+function showImage(){
+ viewerImg.src=images[index]
+}
+
+next.onclick=()=>{
+ index=(index+1)%images.length
+ showImage()
+}
+
+prev.onclick=()=>{
+ index=(index-1+images.length)%images.length
+ showImage()
+}
+
+close.onclick=()=>viewer.classList.add("hidden")
+
+viewer.onclick=e=>{
+ if(e.target===viewer){
+  viewer.classList.add("hidden")
+ }
+}
+
+document.addEventListener("keydown",e=>{
+ if(viewer.classList.contains("hidden"))return
+
+ if(e.key==="ArrowRight") next.onclick()
+ if(e.key==="ArrowLeft") prev.onclick()
+ if(e.key==="Escape") viewer.classList.add("hidden")
+})
+
+let startX=0
+viewer.addEventListener("touchstart",e=>{
+ startX=e.touches[0].clientX
+})
+
+viewer.addEventListener("touchend",e=>{
+ const diff=e.changedTouches[0].clientX-startX
+ if(Math.abs(diff)>50){
+  if(diff<0) next.onclick()
+  else prev.onclick()
+ }
+})
+
+function downloadImage() {
+  const src = currentViewerImage.src;
+  const a = document.createElement("a");
+
+  a.href = src;
+  a.download = src.split("/").pop();
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+async function copyImage() {
+  const src = currentViewerImage.src;
+
+  const blob = await fetch(src).then(r => r.blob());
+
+  await navigator.clipboard.write([
+    new ClipboardItem({
+      [blob.type]: blob
+    })
+  ]);
+}
+
+</script>
+
+</body>
+</html>
