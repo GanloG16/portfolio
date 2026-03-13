@@ -553,26 +553,34 @@ viewer.addEventListener("touchend",e=>{
 })
 
 function downloadImage() {
-  const src = currentViewerImage.src;
-  const a = document.createElement("a");
+  const img = document.getElementById("viewer-img");
 
-  a.href = src;
-  a.download = src.split("/").pop();
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  const link = document.createElement("a");
+  link.href = img.src;
+  link.download = img.src.split("/").pop();
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
-
+ 
 async function copyImage() {
-  const src = currentViewerImage.src;
+  try {
+    const img = document.getElementById("viewer-img");
 
-  const blob = await fetch(src).then(r => r.blob());
+    const response = await fetch(img.src);
+    const blob = await response.blob();
 
-  await navigator.clipboard.write([
-    new ClipboardItem({
-      [blob.type]: blob
-    })
-  ]);
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        [blob.type]: blob
+      })
+    ]);
+
+    console.log("Image copied");
+  } catch (err) {
+    console.error("Copy failed", err);
+  }
 }
 
 </script>
