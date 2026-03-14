@@ -552,16 +552,23 @@ viewer.addEventListener("touchend",e=>{
  }
 })
 
-function downloadImage() {
+async function downloadImage() {
   const img = document.getElementById("viewer-img");
 
+  const response = await fetch(img.src);
+  const blob = await response.blob();
+
+  const url = window.URL.createObjectURL(blob);
+
   const link = document.createElement("a");
-  link.href = img.src;
-  link.download = img.src.split("/").pop();
+  link.href = url;
+  link.download = "image.png";
 
   document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link);
+
+  link.remove();
+  URL.revokeObjectURL(url);
 }
  
 async function copyImage() {
@@ -573,13 +580,13 @@ async function copyImage() {
 
     await navigator.clipboard.write([
       new ClipboardItem({
-        [blob.type]: blob
+        "image/png": blob
       })
     ]);
 
-    console.log("Image copied");
+    console.log("Image copied to clipboard");
   } catch (err) {
-    console.error("Copy failed", err);
+    console.error("Copy failed:", err);
   }
 }
 
