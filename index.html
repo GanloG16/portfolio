@@ -23,7 +23,7 @@ h1,h2,h3{margin-bottom:12px}
 p{color:#bdbdbd;max-width:700px;margin-bottom:20px}
 
 /* PARTICLES */
-#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;display:block;width:100%;height:100%}
 
 /* DEV CARD */
 .dev-card{max-width:640px;width:100%;margin:auto;background:#141419;border-radius:18px;padding:clamp(28px,4vw,50px);display:flex;flex-direction:column;align-items:center;gap:22px;transition:.4s;position:relative;overflow:hidden;text-align:center}
@@ -215,7 +215,7 @@ p{color:#bdbdbd;max-width:700px;margin-bottom:20px}
 <ul>
 <li>High quality creature modelling</li>
 <li>Horror atmosphere and creature design</li>
-<li>Game‑ready optimized assets</li>
+<li>Game-ready optimized assets</li>
 <li>Environment and structure building</li>
 </ul>
 </div>
@@ -426,18 +426,47 @@ card.addEventListener("mousemove",e=>{
  card.style.setProperty("--y",(e.clientY-rect.top)+"px")
 })
 
+/* PARTICLES: fixed scaling to avoid canvas shrinking/offset on zoom */
 const canvas=document.getElementById("particles")
 const ctx=canvas.getContext("2d")
 let w,h
 let particles=[]
 
 function resize(){
- w=canvas.width=window.innerWidth
- h=canvas.height=window.innerHeight
+ // css pixel size
+ const newW = window.innerWidth
+ const newH = window.innerHeight
+
+ // devicePixelRatio handling so canvas content keeps correct crispness and full coverage
+ const dpr = Math.max(1, window.devicePixelRatio || 1)
+
+ // keep canvas CSS sized to viewport
+ canvas.style.width = newW + 'px'
+ canvas.style.height = newH + 'px'
+
+ // actual backing store matches DPR
+ canvas.width = Math.floor(newW * dpr)
+ canvas.height = Math.floor(newH * dpr)
+
+ // scale drawing operations so 1 unit = 1 CSS pixel
+ ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+ // if we already had dimensions, rescale particle positions so they don't bunch top-left
+ if (typeof w !== 'undefined' && typeof h !== 'undefined' && w > 0 && h > 0) {
+  const sx = newW / w
+  const sy = newH / h
+  particles.forEach(p => { p.x *= sx; p.y *= sy })
+ }
+
+ // update logical viewport size (CSS pixels)
+ w = newW
+ h = newH
 }
+
 window.addEventListener("resize",resize)
 resize()
 
+// create particles after initial resize so w/h are correct
 for(let i=0;i<70;i++){
  particles.push({
   x:Math.random()*w,
